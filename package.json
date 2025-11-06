@@ -1,0 +1,31 @@
+{
+  "name": "lab_socket_auth_cookies",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "En este repo se trabajo un sistema de chat utilizando sockets, autenticacion y base de datos",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/juliogodoy1012-python/lab_Socket_auth_cookies.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/juliogodoy1012-python/lab_Socket_auth_cookies/issues"
+  },
+  "homepage": "https://github.com/juliogodoy1012-python/lab_Socket_auth_cookies#readme",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "cookie-parser": "^1.4.7",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "mongodb": "^7.0.0",
+    "nodemon": "^3.1.10",
+    "socket.io": "^4.8.1"
+  }
+}

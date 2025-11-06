@@ -1,0 +1,109 @@
+body.bodyCuerpo {
+  /* Mantiene tus colores y gradiente original */
+  background: linear-gradient(15deg, #acff00 0%, #87ebb0 49%);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+}
+
+/* Contenedor principal del login */
+#login-container {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  border-radius: 16px;
+  padding: 40px 60px;
+  text-align: center;
+  width: 100%;
+  max-width: 400px;
+  animation: fadeIn 0.8s ease-in-out;
+}
+
+/* Fuente ligera y moderna */
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600&display=swap');
+
+#login-container h2 {
+  font-family: 'Quicksand', 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 2rem;
+  background: linear-gradient(90deg, #007d4f, #0aa3b8, #5dd6a1);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-style: italic;
+  letter-spacing: 1px;
+  text-shadow: 0px 1px 4px rgba(0, 0, 0, 0.25);
+  margin-bottom: 25px;
+  animation: colorFlow 6s ease-in-out infinite;
+  transition: transform 0.3s ease;
+}
+
+/* Efecto hover sutil */
+#login-container h2:hover {
+  transform: translateY(-2px);
+  text-shadow: 0px 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* Animación del degradado */
+@keyframes colorFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+
+/* Inputs */
+#login-container input[type="text"],
+#login-container input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  outline: none;
+  transition: all 0.3s ease;
+  font-size: 14px;
+}
+
+#login-container input:focus {
+  border-color: #57d67e;
+  box-shadow: 0 0 6px #57d67e;
+}
+
+/* Botones */
+#login-container button {
+  background: #57d67e;
+  border: none;
+  color: #fff;
+  padding: 10px 15px;
+  margin-top: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s;
+}
+
+#login-container button:hover {
+  background: #49b96d;
+  transform: scale(1.05);
+}
+
+/* Animación sutil */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

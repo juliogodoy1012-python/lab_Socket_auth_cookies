@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Iniciar sesión - Chat FEISBU</title>
+  <link rel="stylesheet" href="/stylesLog.css">
+</head>
+<body class="bodyCuerpo">
+  <div id="login-container">
+    <h2>CHAT FEISBU</h2>
+
+    <div class="formulario">
+      <input type="text" id="username" placeholder="Usuario" required>
+      <input type="password" id="password" placeholder="Contraseña" required>
+    </div>
+
+    <div class="botones">
+      <button id="btnLogin">Iniciar sesión</button>
+      <button id="btnRegistro">Registrar nuevo usuario</button>
+    </div>
+
+    <div id="mensaje"></div>
+  </div>
+
+  <script>
+    const msgDiv = document.getElementById('mensaje');
+
+    async function enviarDatos(url) {
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+
+      if (!username || !password) {
+        msgDiv.textContent = "Completa todos los campos";
+        return;
+      }
+
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+      });
+
+      const text = await res.text();
+      msgDiv.textContent = text;
+
+      if (res.ok && url === '/login') {
+        window.location.href = '/index.html';
+      }
+    }
+
+    document.getElementById('btnLogin').onclick = () => enviarDatos('/login');
+    document.getElementById('btnRegistro').onclick = () => enviarDatos('/register');
+  </script>
+</body>
+</html>

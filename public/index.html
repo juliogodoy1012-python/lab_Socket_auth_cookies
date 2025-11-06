@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Chat Feisbu</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="chat-wrapper">
+    <div id="sidebar">
+      <header>Chat Feisbu</header>
+
+      <div class="user-panel">
+        <input type="text" id="usuario" placeholder="Tu nombre">
+        <select id="sala">
+          <option value="produccion">Producción</option>
+          <option value="rrhh">Recursos Humanos</option>
+          <option value="contabilidad">Contabilidad</option>
+        </select>
+        <button id="btnUnirse">Unirse</button>
+      </div>
+
+      <div id="estado" class="estado-box"></div>
+    </div>
+
+    <div id="chat-panel">
+      <div id="mensajes" class="mensajes"></div>
+
+      <div id="input-area">
+        <input type="text" id="inputMensaje" placeholder="Escribe un mensaje...">
+        <button id="btnEnviar">➤</button>
+      </div>
+
+      <div id="footer-controls">
+        <select id="selectEstado">
+          <option value="disponible">Disponible 💚🟢 </option>
+          <option value="ocupado">Ocupado 🔕</option>
+          <option value="no disponible">No disponible ⛔ </option>
+        </select>
+        <button id="btnBorrar">🗑 Eliminar historial</button>
+      </div>
+    </div>
+  </div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  const socket = io();
+  const mensajesDiv = document.getElementById('mensajes');
+  let usuario = '';
+  let sala = '';
+
+  function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+  }
+
+  const cookieUsuario = getCookie('usuario');
+  if (cookieUsuario) {
+    usuario = cookieUsuario;
+    document.getElementById('usuario').value = usuario;
+    document.getElementById('estado').innerText = `🟢 Bienvenido ${usuario}`;
+
+  
+    sala = document.getElementById('sala').value;
+    socket.emit('unirseSala', { usuario, sala });
+  }
+
+
+  document.getElementById('btnUnirse').onclick = () => {
+    usuario = document.getElementById('usuario').value;
+    sala = document.getElementById('sala').value;
+    if (!usuario) return alert('Ingresa tu nombre');
+    socket.emit('unirseSala', { usuario, sala });
+    document.getElementById('estado').innerText = `🟢 Conectado como ${usuario} en sala ${sala}`;
+  };
+
+  document.getElementById('btnEnviar').onclick = () => {
+    const msg = document.getElementById('inputMensaje').value;
+    if (msg.trim() === '') return;
+    socket.emit('mensaje', msg);
+    document.getElementById('inputMensaje').value = '';
+  };
+
+  socket.on('nuevoMensaje', (msg) => {
+    const p = document.createElement('p');
+    p.textContent = `${msg.usuario}: ${msg.mensaje}`;
+    mensajesDiv.appendChild(p);
+    mensajesDiv.scrollTop = mensajesDiv.scrollHeight;
+  });
+
+  socket.on('historial', (mensajes) => {
+    mensajesDiv.innerHTML = '';
+    mensajes.forEach(m => {
+      const p = document.createElement('p');
+      p.textContent = `${m.usuario}: ${m.mensaje}`;
+      mensajesDiv.appendChild(p);
+    });
+  });
+
+  document.getElementById('btnBorrar').onclick = () => {
+    socket.emit('borrarHistorial');
+  };
+
+  socket.on('historialEliminado', () => {
+    mensajesDiv.innerHTML = '';
+    alert('Tu historial ha sido eliminado');
+  });
+
+  document.getElementById('selectEstado').onchange = () => {
+    const nuevoEstado = document.getElementById('selectEstado').value;
+    socket.emit('cambiarEstado', nuevoEstado);
+  };
+
+  socket.on('estadoActualizado', (estado) => {
+    document.getElementById('estado').innerText = `🟡 Estado actualizado: ${estado}`;
+  });
+
+  socket.on('estadoUsuario', (data) => {
+    const estadoDiv = document.getElementById('estado');
+    const linea = document.createElement('div');
+    linea.textContent = `⚙️ ${data.username} ahora está ${data.estado}`;
+    estadoDiv.appendChild(linea);
+  });
+
+  socket.on('usuariosActivos', (usuarios) => {
+    const estadoDiv = document.getElementById('estado');
+    estadoDiv.innerHTML = '👥 Usuarios activos:<br>';
+    usuarios.forEach(u => {
+      const p = document.createElement('p');
+      p.textContent = `${u.username} — ${u.estado}`;
+      estadoDiv.appendChild(p);
+    });
+  });
+
+  document.getElementById('btnLogout').addEventListener('click', () => {
+  document.cookie = "usuario=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+  window.location.href = '/login.html';
+});
+
+
+</script>
+<button id="btnLogout" class="logout-btn" title="Cerrar sesión">🚪</button>
+</body>
+</html>
